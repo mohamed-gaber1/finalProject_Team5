@@ -14,6 +14,6 @@ const authorize = require("../middlewares/role.middleware");
 router.post("/", createContactMessage);
 
 // Admin only
-router.get("/", authMiddleware, authorize("admin"), getContactMessages);
+router.get("/", authMiddleware, authorize("Admin"), getContactMessages);
 
 module.exports = router;

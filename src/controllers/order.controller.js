@@ -1,5 +1,6 @@
 const Order = require("../models/order.model");
 const Product = require("../models/productModel");
+const User = require("../models/user.model");
 
 const createOrder = async (req, res) => {
     try {
@@ -209,7 +210,8 @@ const getAllOrders = async (req, res) => {
             search
         } = req.query;
 
-        const skip = (page - 1) * limit;
+        const pageNumber = Number(page);
+        const limitNumber = Number(limit);
 
         const filter = {};
 
@@ -217,16 +219,36 @@ const getAllOrders = async (req, res) => {
             filter.status = status;
         }
 
+        // Search by Order ID
+        if (search && search.match(/^[0-9a-fA-F]{24}$/)) {
+            filter._id = search;
+        }
+
+        // Search by Buyer Name
+        if (search && !search.match(/^[0-9a-fA-F]{24}$/)) {
+            const User = require("../models/user.model");
+
+            const users = await User.find({
+                name: { $regex: search, $options: "i" }
+            }).select("_id");
+
+            const userIds = users.map(user => user._id);
+
+            filter.user = { $in: userIds };
+        }
+
+        const skip = (pageNumber - 1) * limitNumber;
+
         const orders = await Order.find(filter)
             .populate("user", "name email")
             .populate("items.product", "name price images")
             .sort({ createdAt: -1 })
             .skip(skip)
-            .limit(Number(limit));
+            .limit(limitNumber);
 
         return res.status(200).json({
-            page: Number(page),
-            limit: Number(limit),
+            page: pageNumber,
+            limit: limitNumber,
             orders
         });
 

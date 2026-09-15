@@ -18,8 +18,8 @@ router.get("/", getAllProducts);
 router.get("/:id", getProductById);
 
 // Admin only
-router.post("/", authMiddleware, authorize("admin"), createProduct);
-router.put("/:id", authMiddleware, authorize("admin"), updateProduct);
-router.delete("/:id", authMiddleware, authorize("admin"), deleteProduct);
+router.post("/", authMiddleware, authorize("Admin"), createProduct);
+router.put("/:id", authMiddleware, authorize("Admin"), updateProduct);
+router.delete("/:id", authMiddleware, authorize("Admin"), deleteProduct);
 
 module.exports = router;

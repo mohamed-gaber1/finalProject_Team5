@@ -28,14 +28,14 @@ router.patch("/:id/cancel", authMiddleware, cancelOrder);
 router.get(
     "/",
     authMiddleware,
-    authorize("admin"),
+    authorize("Admin"),
     getAllOrders
 );
 
 router.patch(
     "/:id/status",
     authMiddleware,
-    authorize("admin"),
+    authorize("Admin"),
     updateOrderStatus
 );
 
