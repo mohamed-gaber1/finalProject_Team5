@@ -1,11 +1,19 @@
-const express = require('express');
+const express = require("express");
+
 const router = express.Router();
+
 const {
   createContactMessage,
   getContactMessages
-} = require('../controllers/contactController');
-router.route('/')
-  .post(createContactMessage) 
-  .get(getContactMessages);   
+} = require("../controllers/contactController");
+
+const authMiddleware = require("../middlewares/auth.middleware");
+const authorize = require("../middlewares/role.middleware");
+
+// Public
+router.post("/", createContactMessage);
+
+// Admin only
+router.get("/", authMiddleware, authorize("admin"), getContactMessages);
 
 module.exports = router;

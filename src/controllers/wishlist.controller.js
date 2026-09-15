@@ -1,4 +1,5 @@
 const Wishlist = require("../models/wishlist.model");
+const Product = require("../models/productModel");
 
 const addToWishlist = async (req, res) => {
     try {
@@ -75,9 +76,56 @@ const removeFromWishlist = async (req, res) => {
     }
 };
 
+const moveToCart = async (req, res) => {
+    try {
+        const { productId } = req.params;
+        const userId = req.user.id;
 
+        const wishlist = await Wishlist.findOne({
+            user: userId,
+            product: productId,
+        });
+
+        if (!wishlist) {
+            return res.status(404).json({
+                success: false,
+                message: "Product not found in wishlist",
+            });
+        }
+
+        const product = await Product.findById(productId);
+
+        if (!product) {
+            return res.status(404).json({
+                success: false,
+                message: "Product not found",
+            });
+        }
+
+        if (product.stock < 1) {
+            return res.status(400).json({
+                success: false,
+                message: "Product is out of stock",
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            productId: productId,
+            quantity: 1,
+        });
+
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "Server error",
+            error: error.message,
+        });
+    }
+};
 module.exports = {
     addToWishlist,
     getWishlist,
     removeFromWishlist,
+    moveToCart
 };
