@@ -4,13 +4,13 @@ const cors = require("cors");
 const app = express();
 
 app.use(
-    cors({
-        origin: [
-            "http://localhost:5173",
-            "https://finalproject-team5.vercel.app",
-        ],
+  cors({
+    origin: [
+      "http://localhost:5174",
+      "https://deep-dive-final-project.vercel.app",
+    ],
     credentials: true,
-    })
+  })
 );
 
 app.use(express.json());
