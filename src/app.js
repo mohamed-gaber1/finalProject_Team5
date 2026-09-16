@@ -6,11 +6,12 @@ const app = express();
 app.use(
   cors({
     origin: [
-      "http://localhost:5174",
+      "http://localhost:5173",
+      "https://finalproject-team5.vercel.app",
       "https://deep-dive-final-project.vercel.app",
     ],
     credentials: true,
-  })
+  } )
 );
 
 app.use(express.json());
