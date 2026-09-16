@@ -9,6 +9,7 @@ app.use(
   })
 );
 
+
 app.use(express.json());
 
 const wishlistRoutes = require("./routes/wishlist.route");
